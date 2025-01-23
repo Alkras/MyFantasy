@@ -4,20 +4,17 @@ import com.example.myfantasy.character.model.Item;
 import com.example.myfantasy.character.model.ItemTemplate;
 import com.example.myfantasy.character.repository.ItemTemplatesRepository;
 import com.example.myfantasy.character.repository.ItemsRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ItemService {
     private final ItemsRepository itemsRepository;
 
     private final ItemTemplatesRepository itemTemplatesRepository;
-
-    public ItemService(ItemsRepository itemsRepository, ItemTemplatesRepository itemTemplatesRepository) {
-        this.itemsRepository = itemsRepository;
-        this.itemTemplatesRepository = itemTemplatesRepository;
-    }
 
     public List<ItemTemplate> getAllItemTemplates() {
         return itemTemplatesRepository.findAll();
@@ -27,7 +24,7 @@ public class ItemService {
         itemsRepository.saveAll(items);
     }
 
-    public void save(Item item){
+    public void save(Item item) {
         itemsRepository.save(item);
     }
 

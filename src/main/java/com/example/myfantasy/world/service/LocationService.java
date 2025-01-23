@@ -1,19 +1,20 @@
 package com.example.myfantasy.world.service;
 
-import com.example.myfantasy.world.model.*;
+import com.example.myfantasy.world.model.Location;
+import com.example.myfantasy.world.model.LocationBiome;
+import com.example.myfantasy.world.model.LocationKey;
+import com.example.myfantasy.world.model.LocationType;
 import com.example.myfantasy.world.repository.LocationsRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class LocationService {
 
     private final LocationsRepository locationsRepository;
-
-    public LocationService(LocationsRepository locationsRepository) {
-        this.locationsRepository = locationsRepository;
-    }
 
     public Location getStartingLocation() {
         return locationsRepository.findById(new LocationKey(0L, 0L)).orElseGet(this::createStartingLocation);

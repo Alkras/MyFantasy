@@ -36,8 +36,16 @@ public class Character {
 
     private BigDecimal money;
 
-    @OneToMany(mappedBy="character", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIdentityReference
     private List<Item> inventory;
+
+    private int hitPoints;
+    private int armor;
+    private int agility;
+    private int attack;
+    private int maxHitPoints;
+    private int experience;
+    private int experienceForLevelUp;
 
 }

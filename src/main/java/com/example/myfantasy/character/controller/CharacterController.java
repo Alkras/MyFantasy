@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/characters")
 public class CharacterController {
 
     private final CharacterService characterService;
@@ -18,7 +19,7 @@ public class CharacterController {
         this.characterService = characterService;
     }
 
-    @GetMapping("/characters/{id}")
+    @GetMapping("/{id}")
     public Character getHeroes(@PathVariable Long id) throws NoCharacterException {
         if (id.equals(0L)) {
             throw new ShopKeeperException("You cannot play as shopkeeper :)");
@@ -26,12 +27,12 @@ public class CharacterController {
         return characterService.getCharacterById(id);
     }
 
-    @GetMapping("/characters")
+    @GetMapping()
     public List<Character> getAllHeroes() {
         return characterService.getAllHeroes();
     }
 
-    @PostMapping("/characters")
+    @PostMapping()
     public Character createHero(@RequestBody Character character) {
         if (Type.SHOPKEEPER.equals(character.getType())) {
             throw new ShopKeeperException("You cannot play as shopkeeper :)");

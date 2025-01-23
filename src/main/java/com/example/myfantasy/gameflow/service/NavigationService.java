@@ -1,4 +1,4 @@
-package com.example.myfantasy.world.service;
+package com.example.myfantasy.gameflow.service;
 
 import com.example.myfantasy.character.exceptions.NoCharacterException;
 import com.example.myfantasy.character.model.Character;
@@ -7,6 +7,9 @@ import com.example.myfantasy.world.model.Direction;
 import com.example.myfantasy.world.model.Location;
 import com.example.myfantasy.world.model.LocationKey;
 import com.example.myfantasy.world.model.request.NavigateRequest;
+import com.example.myfantasy.world.service.LocationService;
+import com.example.myfantasy.world.service.WorldGenerationService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,6 +33,7 @@ public class NavigationService {
         this.tileGenerationLockMap = new ConcurrentHashMap<>();
     }
 
+    @Transactional
     public Location move(NavigateRequest navigateRequest) throws NoCharacterException {
         Character character = characterService.getCharacterById(navigateRequest.getHeroId());
         Location destination = revealLocation(character.getCurrentLocation(), navigateRequest.getDirection());
@@ -44,17 +48,11 @@ public class NavigationService {
         tileGenerationLock.lock();
         try {
             return locationService.getLocationById(destinationLocationKey)
-                    .orElseGet(() -> createLocation(currentLocation, destinationLocationKey));
+                    .orElseGet(() -> worldGenerationService.generateLocation(currentLocation, destinationLocationKey));
         } finally {
             tileGenerationLock.unlock();
             tileGenerationLockMap.remove(destinationLocationKey);
         }
-    }
-
-    private Location createLocation(Location originalLocation, LocationKey destinationLocationKey) {
-        Location destinationLocation = worldGenerationService.generateLocation(originalLocation, destinationLocationKey);
-        locationService.saveLocation(destinationLocation);
-        return destinationLocation;
     }
 
     public LocationKey getDestinationLocationKey(Location location, Direction direction) {
