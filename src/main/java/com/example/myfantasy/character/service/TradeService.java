@@ -56,7 +56,7 @@ public class TradeService {
 
     private List<Item> generateNewItemList(List<ItemTemplate> allItemTemplates, Character shopkeeper) {
         return IntStream.range(0, new Random().nextInt(10))
-                .mapToObj(x -> allItemTemplates.get(new Random().nextInt(itemService.getAllItemTemplates().size())))
+                .mapToObj(_ -> allItemTemplates.get(new Random().nextInt(itemService.getAllItemTemplates().size())))
                 .map(itemTemplate -> buildItem(shopkeeper, itemTemplate))
                 .collect(Collectors.toList());
     }
@@ -93,8 +93,8 @@ public class TradeService {
 
         Long firstId = buyer.getId() < seller.getId() ? buyer.getId() : seller.getId();
         Long secondId = buyer.getId() < seller.getId() ? seller.getId() : buyer.getId();
-        Lock firstLock = transactionLockMap.computeIfAbsent(firstId, id -> new ReentrantLock());
-        Lock secondLock = transactionLockMap.computeIfAbsent(secondId, id -> new ReentrantLock());
+        Lock firstLock = transactionLockMap.computeIfAbsent(firstId, _ -> new ReentrantLock());
+        Lock secondLock = transactionLockMap.computeIfAbsent(secondId, _ -> new ReentrantLock());
 
         firstLock.lock();
         secondLock.lock();

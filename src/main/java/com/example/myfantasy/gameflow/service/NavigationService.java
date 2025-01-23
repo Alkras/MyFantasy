@@ -44,7 +44,7 @@ public class NavigationService {
 
     private Location revealLocation(Location currentLocation, Direction direction) {
         LocationKey destinationLocationKey = getDestinationLocationKey(currentLocation, direction);
-        Lock tileGenerationLock = tileGenerationLockMap.computeIfAbsent(destinationLocationKey, v -> new ReentrantLock());
+        Lock tileGenerationLock = tileGenerationLockMap.computeIfAbsent(destinationLocationKey, _ -> new ReentrantLock());
         tileGenerationLock.lock();
         try {
             return locationService.getLocationById(destinationLocationKey)
