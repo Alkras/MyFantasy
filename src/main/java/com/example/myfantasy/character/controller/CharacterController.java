@@ -37,6 +37,6 @@ public class CharacterController {
         if (Type.SHOPKEEPER.equals(character.getType())) {
             throw new ShopKeeperException("You cannot play as shopkeeper :)");
         }
-        return characterService.createHero(character);
+        return characterService.createHeroWithDefaults(character);
     }
 }

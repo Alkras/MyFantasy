@@ -14,19 +14,23 @@ import java.util.List;
 @AllArgsConstructor
 public class CharacterService {
 
+    private static final int EXPERIENCE_FOR_LEVEL_UP_DEFAULT = 100;
+    private static final int MAX_HIT_POINTS_DEFAULT = 300;
+    private static final int STATS_DEFAULT = 10;
+    private static final int BASE_LEVEL = 1;
     private final CharactersRepository charactersRepository;
     private final LocationService locationService;
 
-    public Character createHero(Character character) {
+    public Character createHeroWithDefaults(Character character) {
         character.setCurrentLocation(locationService.getStartingLocation());
-        character.setLevel(1);
+        character.setLevel(BASE_LEVEL);
         character.setMoney(BigDecimal.ZERO);
-        character.setAgility(10);
-        character.setArmor(10);
-        character.setAttack(10);
-        character.setHitPoints(300);
-        character.setExperience(0);
-        character.setExperienceForLevelUp(100);
+        character.setAgility(STATS_DEFAULT);
+        character.setArmor(STATS_DEFAULT);
+        character.setAttack(STATS_DEFAULT);
+        character.setHitPoints(MAX_HIT_POINTS_DEFAULT);
+        character.setMaxHitPoints(MAX_HIT_POINTS_DEFAULT);
+        character.setExperienceForLevelUp(EXPERIENCE_FOR_LEVEL_UP_DEFAULT);
         return saveHero(character);
     }
 
@@ -35,7 +39,7 @@ public class CharacterService {
     }
 
     public Character getCharacterById(Long id) {
-        return charactersRepository.findById(id).orElseThrow(NoCharacterException::new);
+        return charactersRepository.findById(id).orElseThrow(() -> new NoCharacterException(STR."Character with id:\{id} does not exist"));
     }
 
     public void removeHeroById(Long id) {

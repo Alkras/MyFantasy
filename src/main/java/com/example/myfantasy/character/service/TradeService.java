@@ -124,10 +124,10 @@ public class TradeService {
                 .stream()
                 .filter(sellerItem -> sellerItem.getId().equals(item.getId()))
                 .findFirst()
-                .orElseThrow(() -> new TradeException(seller.getName() + " does not have requested item"));
+                .orElseThrow(() -> new TradeException(STR."\{seller.getName()} does not have requested item"));
 
         if (buyer.getMoney().compareTo(item.getPrice()) < 0) {
-            throw new TradeException(buyer.getName() + "does not have enough money");
+            throw new TradeException(STR."\{buyer.getName()} does not have enough money");
         }
     }
 
