@@ -27,13 +27,10 @@ class ItemServiceTest {
 
     @InjectMocks
     private ItemService itemService;
-
     @Mock
     private ItemsRepository itemsRepository;
-
     @Mock
     private ItemTemplatesRepository itemTemplatesRepository;
-
 
     @Test
     void getAllItemTemplates() {

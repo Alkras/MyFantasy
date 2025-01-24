@@ -7,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BuyItemFromPlayerRequest extends BuyItemRequest{
+public class BuyItemFromPlayerRequest extends BuyItemRequest {
     private Long sellerId;
 }

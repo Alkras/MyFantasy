@@ -32,7 +32,6 @@ class WorldGenerationServiceTest {
     private LocationService locationService;
     @Mock
     private MonsterService monsterService;
-
     @Captor
     private ArgumentCaptor<Location> locationArgumentCaptor;
 

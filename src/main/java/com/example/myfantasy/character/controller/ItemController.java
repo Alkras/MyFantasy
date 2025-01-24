@@ -22,7 +22,7 @@ public class ItemController {
     }
 
     @GetMapping("/items")
-    public List<Item> getAllItems(){
+    public List<Item> getAllItems() {
         return itemService.getAllItems();
     }
 

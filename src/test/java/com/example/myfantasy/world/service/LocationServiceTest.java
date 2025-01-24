@@ -23,10 +23,8 @@ class LocationServiceTest {
 
     @InjectMocks
     private LocationService locationService;
-
     @Mock
     private LocationsRepository locationsRepository;
-
     @Captor
     private ArgumentCaptor<Location> locationArgumentCaptor;
 

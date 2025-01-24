@@ -31,7 +31,7 @@ public enum LocationType {
         totalWeight = lookupWeight.size();
     }
 
-    public static LocationType getRandomWeightedLocationType(){
+    public static LocationType getRandomWeightedLocationType() {
         return lookupWeight.get(new Random().nextInt(totalWeight));
     }
 

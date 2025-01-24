@@ -29,13 +29,10 @@ class ActionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockitoBean
     private NavigationService navigationService;
-
     @MockitoBean
     private FightService fightService;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach

@@ -1,6 +1,5 @@
 package com.example.myfantasy.configuration;
 
-import com.example.myfantasy.character.exceptions.ShopKeeperException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

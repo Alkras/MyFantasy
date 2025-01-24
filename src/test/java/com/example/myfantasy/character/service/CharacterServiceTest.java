@@ -1,9 +1,9 @@
 package com.example.myfantasy.character.service;
 
-import com.example.myfantasy.character.model.request.CreateCharacterRequest;
 import com.example.myfantasy.character.exceptions.CharacterNotFoundException;
 import com.example.myfantasy.character.model.Character;
 import com.example.myfantasy.character.model.Type;
+import com.example.myfantasy.character.model.request.CreateCharacterRequest;
 import com.example.myfantasy.character.repository.CharactersRepository;
 import com.example.myfantasy.world.model.Location;
 import com.example.myfantasy.world.service.LocationService;
@@ -25,12 +25,10 @@ class CharacterServiceTest {
 
     @InjectMocks
     private CharacterService characterService;
-
     @Mock
     private CharactersRepository charactersRepository;
     @Mock
     private LocationService locationService;
-
     @Captor
     private ArgumentCaptor<Character> characterCaptor;
 

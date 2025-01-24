@@ -1,8 +1,8 @@
 package com.example.myfantasy.character.service;
 
-import com.example.myfantasy.character.model.request.CreateCharacterRequest;
 import com.example.myfantasy.character.exceptions.CharacterNotFoundException;
 import com.example.myfantasy.character.model.Character;
+import com.example.myfantasy.character.model.request.CreateCharacterRequest;
 import com.example.myfantasy.character.repository.CharactersRepository;
 import com.example.myfantasy.world.service.LocationService;
 import lombok.AllArgsConstructor;

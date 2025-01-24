@@ -26,13 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(TradeController.class)
 class TradeControllerTest {
 
-
     @Autowired
     private MockMvc mockMvc;
-
     @MockitoBean
     private TradeService tradeService;
-
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach

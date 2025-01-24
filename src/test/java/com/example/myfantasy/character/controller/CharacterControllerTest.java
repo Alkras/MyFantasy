@@ -30,7 +30,6 @@ class CharacterControllerTest {
     private MockMvc mockMvc;
     @MockitoBean
     private CharacterService characterService;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach

@@ -32,7 +32,6 @@ class NavigationServiceTest {
     private CharacterService characterService;
     @Mock
     private LocationService locationService;
-
     @Captor
     private ArgumentCaptor<Character> characterArgumentCaptor;
 

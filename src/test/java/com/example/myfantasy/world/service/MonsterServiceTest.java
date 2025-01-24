@@ -20,7 +20,6 @@ class MonsterServiceTest {
 
     @InjectMocks
     private MonsterService monsterService;
-
     @Mock
     private MonstersRepository monstersRepository;
 

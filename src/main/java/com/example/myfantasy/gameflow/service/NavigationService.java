@@ -1,6 +1,5 @@
 package com.example.myfantasy.gameflow.service;
 
-import com.example.myfantasy.character.exceptions.CharacterNotFoundException;
 import com.example.myfantasy.character.model.Character;
 import com.example.myfantasy.character.service.CharacterService;
 import com.example.myfantasy.gameflow.exception.NavigateException;

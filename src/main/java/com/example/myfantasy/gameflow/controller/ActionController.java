@@ -4,7 +4,6 @@ package com.example.myfantasy.gameflow.controller;
 import com.example.myfantasy.character.Constants;
 import com.example.myfantasy.character.exceptions.ShopKeeperException;
 import com.example.myfantasy.gameflow.model.FightInfo;
-import com.example.myfantasy.gameflow.model.request.FightRequest;
 import com.example.myfantasy.gameflow.service.FightService;
 import com.example.myfantasy.gameflow.service.NavigationService;
 import com.example.myfantasy.world.model.Location;
@@ -30,7 +29,7 @@ public class ActionController {
     }
 
     @PostMapping("/fight")
-    public FightInfo fight(@RequestParam Long characterId){
+    public FightInfo fight(@RequestParam Long characterId) {
         if (Constants.SHOPKEEPER_ID.equals(characterId)) {
             throw new ShopKeeperException("You cannot play as shopkeeper :)");
         }
