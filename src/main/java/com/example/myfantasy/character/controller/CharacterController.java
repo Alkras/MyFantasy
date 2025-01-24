@@ -1,9 +1,10 @@
 package com.example.myfantasy.character.controller;
 
-import com.example.myfantasy.character.exceptions.NoCharacterException;
+import com.example.myfantasy.character.exceptions.CharacterNotFoundException;
 import com.example.myfantasy.character.exceptions.ShopKeeperException;
 import com.example.myfantasy.character.model.Character;
 import com.example.myfantasy.character.model.Type;
+import com.example.myfantasy.character.model.request.CreateCharacterRequest;
 import com.example.myfantasy.character.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class CharacterController {
     }
 
     @GetMapping("/{id}")
-    public Character getHeroes(@PathVariable Long id) throws NoCharacterException {
+    public Character getHero(@PathVariable Long id) throws CharacterNotFoundException {
         if (id.equals(0L)) {
             throw new ShopKeeperException("You cannot play as shopkeeper :)");
         }
@@ -33,10 +34,10 @@ public class CharacterController {
     }
 
     @PostMapping()
-    public Character createHero(@RequestBody Character character) {
-        if (Type.SHOPKEEPER.equals(character.getType())) {
+    public Character createHero(@RequestBody CreateCharacterRequest createCharacterRequest) {
+        if (Type.SHOPKEEPER.equals(createCharacterRequest.getType())) {
             throw new ShopKeeperException("You cannot play as shopkeeper :)");
         }
-        return characterService.createHeroWithDefaults(character);
+        return characterService.createHeroWithDefaults(createCharacterRequest);
     }
 }

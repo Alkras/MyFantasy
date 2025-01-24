@@ -10,4 +10,5 @@ import java.util.List;
 public interface ItemsRepository extends JpaRepository<Item, Long> {
 
     List<Item> findAllByCharacterId(Long characterId);
+
 }

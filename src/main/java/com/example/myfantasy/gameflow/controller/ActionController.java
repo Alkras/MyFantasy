@@ -31,6 +31,9 @@ public class ActionController {
 
     @PostMapping("/fight")
     public FightInfo fight(@RequestParam Long characterId){
+        if (Constants.SHOPKEEPER_ID.equals(characterId)) {
+            throw new ShopKeeperException("You cannot play as shopkeeper :)");
+        }
         return fightService.fight(characterId);
     }
 }

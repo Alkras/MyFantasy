@@ -4,19 +4,17 @@ import com.example.myfantasy.character.model.Item;
 import com.example.myfantasy.character.model.request.BuyItemFromPlayerRequest;
 import com.example.myfantasy.character.model.request.BuyItemRequest;
 import com.example.myfantasy.character.service.TradeService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/trade")
+@AllArgsConstructor
 public class TradeController {
 
     private final TradeService tradeService;
-
-    public TradeController(TradeService tradeService) {
-        this.tradeService = tradeService;
-    }
 
     @PostMapping("/shop/refresh")
     public List<Item> refreshShopKeeperItems() {

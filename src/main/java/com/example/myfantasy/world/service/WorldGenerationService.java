@@ -17,9 +17,9 @@ public class WorldGenerationService {
 
     private final MonsterService monsterService;
 
-    public Location generateLocation(Location location, LocationKey destinationLocationKey) {
+    public Location generateLocation(LocationBiome originalLocationBiome, LocationKey destinationLocationKey) {
         LocationType locationType = generateRandomLocationType();
-        LocationBiome locationBiome = generateLocationBiome(location.getLocationBiome());
+        LocationBiome locationBiome = generateLocationBiome(originalLocationBiome);
         Location.LocationBuilder locationBuilder = Location.builder()
                 .x(destinationLocationKey.getX())
                 .y(destinationLocationKey.getY())
@@ -42,7 +42,7 @@ public class WorldGenerationService {
     private static int calculateThreatLevel(LocationKey destinationLocationKey) {
         return Long.valueOf(
                         Math.min(
-                                (Math.abs(destinationLocationKey.getX()) + Math.abs(destinationLocationKey.getY()) / 10) + 1,
+                                ((Math.abs(destinationLocationKey.getX()) + Math.abs(destinationLocationKey.getY())) / 10) + 1,
                                 Integer.MAX_VALUE))
                 .intValue();
     }

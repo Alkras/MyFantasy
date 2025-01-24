@@ -1,5 +1,6 @@
 package com.example.myfantasy.character.service;
 
+import com.example.myfantasy.character.exceptions.ItemNotFoundException;
 import com.example.myfantasy.character.model.Item;
 import com.example.myfantasy.character.model.ItemTemplate;
 import com.example.myfantasy.character.repository.ItemTemplatesRepository;
@@ -37,6 +38,6 @@ public class ItemService {
     }
 
     public Item getItemById(Long itemId) {
-        return itemsRepository.findById(itemId).orElse(null);
+        return itemsRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException(STR."Item with id:\{itemId} does not exists"));
     }
 }

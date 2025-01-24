@@ -1,5 +1,6 @@
-package com.example.myfantasy.character.configuration;
+package com.example.myfantasy.configuration;
 
+import com.example.myfantasy.character.exceptions.ShopKeeperException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
+
+    @ExceptionHandler(InputException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorMessage handleException(InputException ex) {
+        return ErrorMessage.builder()
+                .error(ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

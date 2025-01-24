@@ -17,7 +17,7 @@ public class LocationService {
     private final LocationsRepository locationsRepository;
 
     public Location getStartingLocation() {
-        return locationsRepository.findById(new LocationKey(0L, 0L)).orElseGet(this::createStartingLocation);
+        return getLocationById(new LocationKey(0L, 0L)).orElseGet(this::createStartingLocation);
     }
 
     public Optional<Location> getLocationById(LocationKey locationKey) {

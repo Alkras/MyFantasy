@@ -1,6 +1,7 @@
 package com.example.myfantasy.character.service;
 
-import com.example.myfantasy.character.exceptions.NoCharacterException;
+import com.example.myfantasy.character.model.request.CreateCharacterRequest;
+import com.example.myfantasy.character.exceptions.CharacterNotFoundException;
 import com.example.myfantasy.character.model.Character;
 import com.example.myfantasy.character.repository.CharactersRepository;
 import com.example.myfantasy.world.service.LocationService;
@@ -21,7 +22,10 @@ public class CharacterService {
     private final CharactersRepository charactersRepository;
     private final LocationService locationService;
 
-    public Character createHeroWithDefaults(Character character) {
+    public Character createHeroWithDefaults(CreateCharacterRequest createCharacterRequest) {
+        Character character = new Character();
+        character.setName(createCharacterRequest.getName());
+        character.setType(createCharacterRequest.getType());
         character.setCurrentLocation(locationService.getStartingLocation());
         character.setLevel(BASE_LEVEL);
         character.setMoney(BigDecimal.ZERO);
@@ -39,7 +43,7 @@ public class CharacterService {
     }
 
     public Character getCharacterById(Long id) {
-        return charactersRepository.findById(id).orElseThrow(() -> new NoCharacterException(STR."Character with id:\{id} does not exist"));
+        return charactersRepository.findById(id).orElseThrow(() -> new CharacterNotFoundException(STR."Character with id:\{id} does not exist"));
     }
 
     public void removeHeroById(Long id) {

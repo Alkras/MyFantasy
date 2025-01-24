@@ -10,11 +10,13 @@ import com.example.myfantasy.character.model.request.BuyItemFromPlayerRequest;
 import com.example.myfantasy.character.model.request.BuyItemRequest;
 import com.example.myfantasy.world.model.LocationType;
 import jakarta.transaction.Transactional;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -35,7 +37,7 @@ public class TradeService {
     }
 
     public List<Item> getShopKeeperItems() {
-        Character shopkeeper = characterService.getCharacterById(0L);
+        Character shopkeeper = characterService.getCharacterById(Constants.SHOPKEEPER_ID);
         return shopkeeper.getInventory();
     }
 
@@ -46,29 +48,6 @@ public class TradeService {
         List<Item> shopKeeperItems = generateNewItemList(itemService.getAllItemTemplates(), shopkeeper);
         itemService.saveAll(shopKeeperItems);
         return shopKeeperItems;
-    }
-
-    private void clearShopKeeperInventory() {
-        List<Item> shopkeeperItemList = itemService.findAllByCharacterId(Constants.SHOPKEEPER_ID);
-        shopkeeperItemList.forEach(item -> item.setCharacter(null));
-        itemService.saveAll(shopkeeperItemList);
-    }
-
-    private List<Item> generateNewItemList(List<ItemTemplate> allItemTemplates, Character shopkeeper) {
-        return IntStream.range(0, new Random().nextInt(10))
-                .mapToObj(_ -> allItemTemplates.get(new Random().nextInt(itemService.getAllItemTemplates().size())))
-                .map(itemTemplate -> buildItem(shopkeeper, itemTemplate))
-                .collect(Collectors.toList());
-    }
-
-    private static Item buildItem(Character shopkeeper, ItemTemplate itemTemplate) {
-        return Item.builder()
-                .itemType(itemTemplate.getItemType())
-                .name(itemTemplate.getName())
-                .price(itemTemplate.getPrice())
-                .strength(itemTemplate.getStrength())
-                .character(shopkeeper)
-                .build();
     }
 
     @Transactional
@@ -85,8 +64,31 @@ public class TradeService {
                 itemService.getItemById(buyItemFromPlayerRequest.getItemId()));
     }
 
+    private void clearShopKeeperInventory() {
+        List<Item> shopkeeperItemList = itemService.findAllByCharacterId(Constants.SHOPKEEPER_ID);
+        shopkeeperItemList.forEach(item -> item.setCharacter(null));
+        itemService.saveAll(shopkeeperItemList);
+    }
 
-    public Item buyItem(Character buyer, Character seller, Item item) {
+    private List<Item> generateNewItemList(List<ItemTemplate> allItemTemplates, Character shopkeeper) {
+        return IntStream.range(0, new Random().nextInt(5, 11))
+                .mapToObj(_ -> allItemTemplates.get(new Random().nextInt(allItemTemplates.size())))
+                .map(itemTemplate -> buildItem(shopkeeper, itemTemplate))
+                .collect(Collectors.toList());
+    }
+
+    private Item buildItem(Character shopkeeper, ItemTemplate itemTemplate) {
+        return Item.builder()
+                .itemType(itemTemplate.getItemType())
+                .name(itemTemplate.getName())
+                .price(itemTemplate.getPrice())
+                .strength(itemTemplate.getStrength())
+                .character(shopkeeper)
+                .build();
+    }
+
+    @SneakyThrows(InterruptedException.class)
+    private Item buyItem(Character buyer, Character seller, Item item) {
         if (buyer.getId().equals(seller.getId())) {
             throw new TradeException("Cannot trade with yourself");
         }
@@ -96,20 +98,31 @@ public class TradeService {
         Lock firstLock = transactionLockMap.computeIfAbsent(firstId, _ -> new ReentrantLock());
         Lock secondLock = transactionLockMap.computeIfAbsent(secondId, _ -> new ReentrantLock());
 
-        firstLock.lock();
-        secondLock.lock();
-        try {
-            tradeValidation(buyer, seller, item);
-            return performTrade(buyer, seller, item);
-        } finally {
-            secondLock.unlock();
-            transactionLockMap.remove(secondId);
-            firstLock.unlock();
+        if (firstLock.tryLock(3, TimeUnit.SECONDS)) {
+            try {
+                if (secondLock.tryLock(3, TimeUnit.SECONDS)) {
+                    try {
+                        tradeValidation(buyer, seller, item);
+                        return performTrade(buyer, seller, item);
+                    } finally {
+                        secondLock.unlock();
+                        transactionLockMap.remove(secondId);
+                    }
+                } else {
+                    transactionLockMap.remove(secondId);
+                    throw new TradeException("Couldn't finish trade");
+                }
+            } finally {
+                firstLock.unlock();
+                transactionLockMap.remove(firstId);
+            }
+        } else {
             transactionLockMap.remove(firstId);
+            throw new TradeException("Couldn't finish trade");
         }
     }
 
-    private static void tradeValidation(Character buyer, Character seller, Item item) {
+    private void tradeValidation(Character buyer, Character seller, Item item) {
         if (Type.SHOPKEEPER.equals(seller.getType())) {
             if (!LocationType.SHOP.equals(buyer.getCurrentLocation().getLocationType())) {
                 throw new TradeException("Cannot buy from ShopKeeper outside of shop");
@@ -141,5 +154,4 @@ public class TradeService {
         characterService.saveHero(buyer);
         return item;
     }
-
 }

@@ -126,7 +126,10 @@ public class FightService {
         return Math.max(Math.ceilDiv(attackerAttack, 2), attackerAttack - defenderArmor);
     }
 
-    private static boolean isAttackEvaded(int attackerAgility, int defenderAgility) {
+    private boolean isAttackEvaded(int attackerAgility, int defenderAgility) {
+        if (attackerAgility == 0 && defenderAgility == 0) {
+            return false;
+        }
         return new Random().nextInt(attackerAgility + defenderAgility) > attackerAgility;
     }
 

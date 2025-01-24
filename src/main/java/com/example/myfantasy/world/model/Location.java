@@ -28,10 +28,4 @@ public class Location {
     private LocationBiome locationBiome;
 
     private int locationThreatLevel;
-
-    public Location(LocationType locationType, LocationBiome locationBiome, int locationThreatLevel) {
-        this.locationType = locationType;
-        this.locationBiome = locationBiome;
-        this.locationThreatLevel = locationThreatLevel;
-    }
 }

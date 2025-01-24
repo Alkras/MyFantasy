@@ -1,14 +1,12 @@
 package com.example.myfantasy.character.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class BuyItemRequest {
     private long buyerId;
     private long itemId;

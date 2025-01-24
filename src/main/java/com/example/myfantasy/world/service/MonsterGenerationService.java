@@ -16,7 +16,7 @@ public class MonsterGenerationService {
     private static final int HIT_POINTS_STAT_BOOST = 10;
 
     Optional<Monster> generateMonster(LocationType locationType, LocationBiome locationBiome, int threatLvl) {
-        if (!LocationType.MONSTER.equals(locationType)) {
+        if (!LocationType.MONSTER.equals(locationType) || threatLvl == 0) {
             return Optional.empty();
         }
         return Optional.ofNullable(
